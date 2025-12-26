@@ -388,6 +388,11 @@ def answer_question(user_id, question_id, answer):
         update_q_table(message, persuasive_type, activity, reward, question_id)
         save_q_table(user_id)
 
+        # Log user interaction
+        q_value = q_table.get((message, persuasive_type, activity), 0)
+        response_type = "OK" if answer else "Cancel"
+        log_user_interaction(user_id, response_type, q_value, persuasive_type, message)
+
         return return_json(200, "Success")
     except Exception as e:
         print(f"Error in answer_question: {str(e)}", file=sys.stderr)
